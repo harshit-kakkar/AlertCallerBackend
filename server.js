@@ -23,12 +23,37 @@ app.get('/', (req, res) => {
 
 
 app.post('/register', async (req, res) => {
-    const user = new Users({
-        phone: req.body.phone,
-        active: true
-    })
-    await user.save();
-    res.send("User created successfully.")
+
+
+    let responseOfFind = []
+
+    try{
+        responseOfFind = await Users.find({"phone": req.body.phone})
+    }catch(err){
+        console.log(err)
+    }
+
+    if(responseOfFind.length){
+        await Users.update(
+            {"phone": req.body.phone},
+            {active: true}
+        )
+        res.send("Users status changed to active true.")
+    }
+    else{
+
+        const user = new Users({
+            phone: req.body.phone,
+            active: true
+        })
+        await user.save();
+        res.send("User created successfully.")
+
+    }
+
+
+
+
     
 })
 
