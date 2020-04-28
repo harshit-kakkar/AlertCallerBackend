@@ -13,6 +13,9 @@ mongoose.connect('mongodb://localhost/AlertCaller',
 })
 
 
+const requestRoutes = require('./routes/request');
+app.use('/request', requestRoutes)
+
 
 app.get('/', (req, res) => {
     res.send("Home page")
