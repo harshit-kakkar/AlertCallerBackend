@@ -17,11 +17,11 @@ router.get('/recieved', async (req, res) => {
 router.put('/sent', async (req, res) => {
     let sentPhone = req.body.sentPhone
     let reqPhone = req.body.phone
-                                //Logic to be added to push only unique phone numbers
+                               
     await Users.update(
         {"phone": req.body.phone},
         {
-            $push: {sent: sentPhone}
+            $addToSet: {sent: sentPhone}
         }
     )
 
@@ -38,14 +38,13 @@ router.put('/sent', async (req, res) => {
         await Users.update(
             {"phone": sentPhone},
             {
-                $push: {recieved: reqPhone}
+                $addToSet: {recieved: reqPhone}
             }
         )
 
         res.send("Request recieved");
     }
     else{
-                        // Logic to be added to register a non existent phone number
         const user = new Users({
             phone: sentPhone,
             active: false
