@@ -2,7 +2,11 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const Users = require('./models/Users')
+const cors = require('cors')
 
+  
+app.use(cors());
+app.options('*', cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
@@ -59,7 +63,8 @@ app.post('/register', async (req, res) => {
 
 
 app.get('/linked', async (req, res) => {
-    const linked_contacts = await Users.find({"phone": req.body.phone}, {"linked": 1, "_id": 0});
+    
+    const linked_contacts = await Users.find({phone: req.query.phone}, {"linked": 1, "_id": 0});
     res.send(linked_contacts) 
 })
 
